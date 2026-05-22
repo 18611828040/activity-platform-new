@@ -1,64 +1,84 @@
-import Image from "next/image";
+'use client';
 
-export default function Home() {
+import { useState } from 'react';
+import { PageHeader } from '@/components/PageHeader';
+import { PageAnalyticsSection } from '@/components/PageAnalyticsSection';
+import { PushAnalyticsSection } from '@/components/PushAnalyticsSection';
+import { UserBehaviorSection } from '@/components/UserBehaviorSection';
+import { UserPathSection } from '@/components/UserPathSection';
+import { UserKeyBehaviorIndicators } from '@/components/UserKeyBehaviorIndicators';
+import { BusinessConversionSection } from '@/components/BusinessConversionSection';
+import { DataTableSection } from '@/components/DataTableSection';
+import { mockData } from '@/data/mockData';
+import { ViewMode } from '@/types/activity';
+
+export default function ActivityAnalyticsPage() {
+  const [viewMode, setViewMode] = useState<ViewMode>('activity');
+
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
+    <div className="min-h-screen bg-slate-50">
+      <PageHeader data={mockData} />
+
+      <div className="px-6 pt-4">
+        <div className="flex items-center gap-4 mb-4">
+          <span className="text-sm font-medium text-slate-600">查看模式：</span>
+          <div className="flex rounded-lg border border-slate-300 overflow-hidden">
+            <button
+              onClick={() => setViewMode('activity')}
+              className={`px-4 py-2 text-sm font-medium transition-colors ${
+                viewMode === 'activity'
+                  ? 'bg-blue-600 text-white'
+                  : 'bg-white text-slate-600 hover:bg-slate-50'
+              }`}
             >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
+              活动分析
+            </button>
+            <button
+              onClick={() => setViewMode('task')}
+              className={`px-4 py-2 text-sm font-medium transition-colors ${
+                viewMode === 'task'
+                  ? 'bg-blue-600 text-white'
+                  : 'bg-white text-slate-600 hover:bg-slate-50'
+              }`}
             >
-              Learning
-            </a>{" "}
-            center.
-          </p>
+              任务分析
+            </button>
+          </div>
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
+      </div>
+
+      <main className="p-6 space-y-6">
+        {viewMode === 'activity' && (
+          <>
+            <PageAnalyticsSection data={mockData.pageAnalytics} />
+            <PushAnalyticsSection data={mockData.taskAnalytics.currentData} />
+            {mockData.taskAnalytics.currentData.userBehaviorAnalysis && (
+              <UserBehaviorSection
+                data={mockData.taskAnalytics.currentData.userBehaviorAnalysis}
+              />
+            )}
+          </>
+        )}
+
+        {viewMode === 'task' && (
+          <>
+            <BusinessConversionSection data={mockData.taskAnalytics.currentData} />
+            {mockData.taskAnalytics.currentData.userPathAnalysis && (
+              <UserPathSection
+                data={mockData.taskAnalytics.currentData.userPathAnalysis}
+              />
+            )}
+            <PushAnalyticsSection data={mockData.taskAnalytics.currentData} />
+            {mockData.taskAnalytics.userKeyBehaviorIndicators &&
+              mockData.taskAnalytics.userKeyBehaviorIndicators.length > 0 && (
+                <UserKeyBehaviorIndicators
+                  data={mockData.taskAnalytics.userKeyBehaviorIndicators}
+                />
+              )}
+          </>
+        )}
+
+        <DataTableSection data={mockData.dailyDetails} viewMode={viewMode} />
       </main>
     </div>
   );
