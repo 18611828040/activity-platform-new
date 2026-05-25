@@ -10,12 +10,8 @@ permissions:
   pages: write
   id-token: write
 
-concurrency:
-  group: "pages"
-  cancel-in-progress: false
-
 jobs:
-  build:
+  build-and-deploy:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -29,26 +25,10 @@ jobs:
         run: npm ci
       - name: Build
         run: npm run build
-      - name: Verify output
-        run: ls -la out/ && ls -la out/_next/static/chunks/ | head -10
       - name: Upload artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-pages-artifact@v3
         with:
-          name: github-pages
-          path: out
-
-  deploy:
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    needs: build
-    runs-on: ubuntu-latest
-    steps:
-      - name: Download artifact
-        uses: actions/download-artifact@v4
-        with:
-          name: github-pages
-          path: out
+          path: ./out
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
