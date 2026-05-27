@@ -1,4 +1,128 @@
-import { ActivityAnalyticsResponse } from '@/types/activity';
+import { ActivityAnalyticsResponse, Activity, Task, ActivityEffectData, UnifiedListItem } from '@/types/activity';
+
+// Activity Management mock data
+export const mockActivities: Activity[] = [
+  {
+    id: 'ACT001',
+    name: '618理财狂欢节',
+    landingPageCode: 'LP6182024',
+    pageCode: 'PG618001',
+    aggregationStartDate: '2024-06-01',
+    startDate: '2024-06-01',
+    endDate: '2024-06-30',
+    status: 'running',
+    creator: '张三',
+    createdAt: '2024-05-15 10:30:00',
+    updatedAt: '2024-06-01 09:00:00',
+    indicators: [
+      { templateId: 'T001', indicatorTypes: ['behavior'], indicatorName: '页面浏览量', fields: [{ fieldName: 'PV', description: '页面浏览量' }, { fieldName: 'UV', description: '独立访客数' }], createdAt: '2024-05-15', updatedAt: '2024-05-15' },
+      { templateId: 'T002', indicatorTypes: ['business'], indicatorName: '转化率', fields: [{ fieldName: '成交额', description: '业务成交金额' }], createdAt: '2024-05-15', updatedAt: '2024-05-15' },
+      { templateId: 'T003', indicatorTypes: ['activation'], indicatorName: '激活用户数', fields: [{ fieldName: '入金量', description: '用户入金金额', threshold: { tag: '入金', operator: '>', value: 1000 } }], createdAt: '2024-05-15', updatedAt: '2024-05-15' },
+    ],
+  },
+  {
+    id: 'ACT002',
+    name: '新手专享活动',
+    landingPageCode: 'LPNEW2024',
+    pageCode: 'PGNEW002',
+    aggregationStartDate: '2024-05-01',
+    startDate: '2024-05-01',
+    endDate: '2024-07-31',
+    status: 'running',
+    creator: '李四',
+    createdAt: '2024-04-20 14:00:00',
+    updatedAt: '2024-05-01 08:00:00',
+    indicators: [
+      { templateId: 'T004', indicatorTypes: ['behavior'], indicatorName: '注册转化', fields: [{ fieldName: 'PV', description: '页面浏览量' }, { fieldName: 'UV', description: '独立访客数' }], createdAt: '2024-04-20', updatedAt: '2024-04-20' },
+      { templateId: 'T005', indicatorTypes: ['business'], indicatorName: '入金金额', fields: [{ fieldName: '成交额', description: '业务成交金额' }], createdAt: '2024-04-20', updatedAt: '2024-04-20' },
+    ],
+  },
+  {
+    id: 'ACT003',
+    name: '父亲节特惠',
+    landingPageCode: 'LPFD2024',
+    pageCode: 'PGFD003',
+    aggregationStartDate: '2024-06-10',
+    startDate: '2024-06-10',
+    endDate: '2024-06-18',
+    status: 'ended',
+    creator: '王五',
+    createdAt: '2024-06-01 11:00:00',
+    updatedAt: '2024-06-10 09:30:00',
+    indicators: [
+      { templateId: 'T006', indicatorTypes: ['behavior'], indicatorName: '点击率', fields: [{ fieldName: 'PV', description: '页面浏览量' }, { fieldName: 'UV', description: '独立访客数' }], createdAt: '2024-06-01', updatedAt: '2024-06-01' },
+    ],
+  },
+  {
+    id: 'ACT004',
+    name: '暑期嘉年华',
+    landingPageCode: 'LPSUM2024',
+    pageCode: 'PGSUM004',
+    aggregationStartDate: '2024-07-01',
+    startDate: '2024-07-01',
+    endDate: '2024-08-31',
+    status: 'pending',
+    creator: '赵六',
+    createdAt: '2024-06-15 09:00:00',
+    updatedAt: '2024-06-15 09:00:00',
+    indicators: [],
+  },
+];
+
+export const mockTasks: Task[] = [
+  { id: 'T001', name: '新客专享理财推送', activityId: 'ACT001', activityName: '618理财狂欢节', status: 'running', createdAt: '2024-06-01' },
+  { id: 'T002', name: '老客回馈短信', activityId: 'ACT001', activityName: '618理财狂欢节', status: 'running', createdAt: '2024-06-05' },
+  { id: 'T003', name: '新手礼包领取提醒', activityId: 'ACT002', activityName: '新手专享活动', status: 'pending', createdAt: '2024-05-15' },
+  { id: 'T004', name: '父亲节活动通知', activityId: 'ACT003', activityName: '父亲节特惠', status: 'ended', createdAt: '2024-06-08' },
+];
+
+// Unified list combining activities and tasks
+export const mockUnifiedList: UnifiedListItem[] = [
+  ...mockActivities.map((a) => ({
+    id: a.id,
+    type: 'activity' as const,
+    name: a.name,
+    status: a.status,
+    startDate: a.startDate,
+    endDate: a.endDate,
+    creator: a.creator,
+    landingPageCode: a.landingPageCode,
+    pageCode: a.pageCode,
+    aggregationStartDate: a.aggregationStartDate,
+    indicators: a.indicators,
+    createdAt: a.createdAt,
+    updatedAt: a.updatedAt,
+  })),
+  ...mockTasks.map((t) => ({
+    id: t.id,
+    type: 'task' as const,
+    name: t.name,
+    status: t.status,
+    startDate: t.createdAt,
+    endDate: t.createdAt,
+    creator: undefined,
+    relatedActivityName: t.activityName,
+    activityId: t.activityId,
+    createdAt: t.createdAt,
+    updatedAt: t.createdAt,
+  })),
+];
+
+export const mockActivityEffectData: ActivityEffectData = {
+  exposureCount: 386500,
+  clickCount: 68400,
+  conversionCount: 18650,
+  conversionRate: 4.8,
+  dailyData: [
+    { date: '2024-06-12', exposureCount: 52000, clickCount: 9200, conversionCount: 2500 },
+    { date: '2024-06-13', exposureCount: 48500, clickCount: 8600, conversionCount: 2300 },
+    { date: '2024-06-14', exposureCount: 55600, clickCount: 9800, conversionCount: 2680 },
+    { date: '2024-06-15', exposureCount: 61200, clickCount: 10800, conversionCount: 2950 },
+    { date: '2024-06-16', exposureCount: 58900, clickCount: 10400, conversionCount: 2820 },
+    { date: '2024-06-17', exposureCount: 64300, clickCount: 11300, conversionCount: 3080 },
+    { date: '2024-06-18', exposureCount: 46000, clickCount: 8300, conversionCount: 2320 },
+  ],
+};
 
 export const mockData: ActivityAnalyticsResponse = {
   activityId: 'ACT2024001',

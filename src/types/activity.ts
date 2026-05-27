@@ -163,3 +163,85 @@ export interface ActivityAnalyticsResponse {
 }
 
 export type ViewMode = 'activity' | 'task';
+
+// Activity Management types
+export type ActivityStatus = 'pending' | 'running' | 'ended';
+export type IndicatorType = 'behavior' | 'business' | 'activation';
+
+export interface IndicatorField {
+  fieldName: string;
+  description: string;
+  threshold?: {
+    tag: string;
+    operator: string;
+    value: number;
+  };
+}
+
+export interface ActivityIndicator {
+  templateId: string;
+  indicatorTypes: IndicatorType[];
+  indicatorName: string;
+  fields: IndicatorField[];
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface Activity {
+  id: string;
+  name: string;
+  landingPageCode: string;
+  pageCode: string;
+  aggregationStartDate: string;
+  startDate: string;
+  endDate: string;
+  status: ActivityStatus;
+  creator: string;
+  indicators: ActivityIndicator[];
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface Task {
+  id: string;
+  name: string;
+  activityId: string;
+  activityName: string;
+  status: 'running' | 'pending' | 'ended';
+  createdAt: string;
+  userGroup?: string;
+}
+
+export interface UnifiedListItem {
+  id: string;
+  type: 'activity' | 'task';
+  name: string;
+  status: ActivityStatus | 'pending';
+  startDate: string;
+  endDate: string;
+  creator?: string;
+  relatedActivityName?: string;
+  createdAt: string;
+  updatedAt?: string;
+  // Activity specific fields
+  landingPageCode?: string;
+  pageCode?: string;
+  aggregationStartDate?: string;
+  indicators?: ActivityIndicator[];
+  // Task specific fields
+  activityId?: string;
+  userGroup?: string;
+}
+
+export interface ActivityEffectData {
+  exposureCount: number;
+  clickCount: number;
+  conversionCount: number;
+  conversionRate: number;
+  dailyData: {
+    date: string;
+    exposureCount: number;
+    clickCount: number;
+    conversionCount: number;
+  }[];
+}
