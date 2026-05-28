@@ -1,0 +1,6 @@
+1:"$Sreact.fragment"
+2:I[9165,["/activity-platform-new/_next/static/chunks/0rg.w7_5~ml8w.js","/activity-platform-new/_next/static/chunks/04b4-2nawanig.js","/activity-platform-new/_next/static/chunks/14xjm-8jz~awv.js"],"ActivityEffectClient"]
+3:I[38003,["/activity-platform-new/_next/static/chunks/0rg.w7_5~ml8w.js","/activity-platform-new/_next/static/chunks/04b4-2nawanig.js"],"OutletBoundary"]
+4:"$Sreact.suspense"
+0:{"rsc":["$","$1","c",{"children":[["$","$L2",null,{"item":{"id":"T004","name":"父亲节活动通知","activityId":"ACT003","activityName":"父亲节特惠","status":"ended","createdAt":"2024-06-08"},"isActivity":false}],[["$","script","script-0",{"src":"/activity-platform-new/_next/static/chunks/14xjm-8jz~awv.js","async":true}]],["$","$L3",null,{"children":["$","$4",null,{"name":"Next.MetadataOutlet","children":"$@5"}]}]]}],"isPartial":false,"staleTime":300,"varyParams":null,"buildId":"HveqNF5HCaxmOszvvUYIp"}
+5:null
