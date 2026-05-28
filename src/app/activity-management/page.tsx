@@ -319,7 +319,7 @@ export default function ActivityManagementPage() {
                   <td className="px-3 py-2.5 text-slate-500 whitespace-nowrap">{item.updatedAt?.substring(0, 10) || '-'}</td>
                   <td className="px-3 py-2.5 whitespace-nowrap">
                     <Link
-                      href={`/activity-management/${item.id}`}
+                      href={item.type === 'activity' ? `/activity-analysis/${item.id}` : `/task-analysis/${item.id}`}
                       className="px-2 py-1 border border-blue-600 text-blue-600 rounded text-xs font-medium hover:bg-blue-50 whitespace-nowrap"
                     >
                       查看
